@@ -13,6 +13,7 @@
         <th>Phone</th>
         <th>City</th>
         <th>Company</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -23,12 +24,32 @@
         <td>{{ user.phone }}</td>
         <td>{{ user.address.city }}</td>
         <td>{{ user.company.name }}</td>
+        <td><button @click="selectUser(user)">More</button></td>
       </tr>
     </tbody>
   </table>
 
   <p v-if="!hasFilteredUsers && !loading">No users found.</p>
   <p v-if="loading">Loading...</p>
+
+  <div v-if="selectedUser" class="modal" @click="closeModal">
+    <div class="modal-content" @click.stop>
+      <span class="close" @click="closeModal"></span>
+      <h2>{{ selectedUser.name }}</h2>
+      <p><strong>Username:</strong> {{ selectedUser.username }}</p>
+      <p><strong>Email:</strong> {{ selectedUser.email }}</p>
+      <p><strong>Phone:</strong> {{ selectedUser.phone }}</p>
+      <p>
+        <strong>Address:</strong> {{ selectedUser.address.street }},
+        {{ selectedUser.address.suite }}, {{ selectedUser.address.city }},
+        {{ selectedUser.address.zipcode }}
+      </p>
+      <p>
+        <strong>Company:</strong> {{ selectedUser.company.name }} -
+        {{ selectedUser.company.catchPhrase }}
+      </p>
+    </div>
+  </div>
 </template>
   
 <script>
@@ -40,6 +61,7 @@ export default {
     const searchUsers = ref('')
     const loading = ref(false)
     const error = ref(null)
+    const selectedUser = ref(null)
 
     const fetchUsers = async () => {
       loading.value = true
@@ -65,17 +87,55 @@ export default {
 
     const hasFilteredUsers = computed(() => filteredUsers.value.length > 0)
 
+    const selectUser = (user) => {
+      selectedUser.value = user
+    }
+
+    const closeModal = () => {
+      selectedUser.value = null
+    }
+
     return {
       searchUsers,
       fetchUsers,
       filteredUsers,
       hasFilteredUsers,
       loading,
-      error
+      error,
+      selectedUser,
+      selectUser,
+      closeModal
     }
   }
 }
 </script>
 
 <style scoped>
+.modal {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  width: 400px;
+  max-width: 90%;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 20px;
+  cursor: pointer;
+}
 </style>
