@@ -38,7 +38,7 @@
     Fetch Users' to load, search and display the user table
   </p>
   <p v-if="!loading && usersLoaded && !hasFilteredUsers" class="pl-8 py-10">No users found.</p>
-  <p v-if="loading">Loading...</p>
+  <p class="pl-8" v-if="loading">Loading...</p>
 
   <UserModal v-if="selectedUser" :user="selectedUser" @close="closeModal" />
 </template>
