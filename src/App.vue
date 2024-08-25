@@ -87,8 +87,6 @@
                     </button>
                   </td>
                 </tr>
-
-                <!-- More people... -->
               </tbody>
             </table>
           </div>
@@ -102,22 +100,47 @@
   <p v-if="!hasFilteredUsers && !loading">No users found.</p>
   <p v-if="loading">Loading...</p>
 
-  <div v-if="selectedUser" class="modal" @click="closeModal">
-    <div class="modal-content" @click.stop>
-      <span class="close" @click="closeModal"></span>
-      <h2>{{ selectedUser.name }}</h2>
-      <p><strong>Username:</strong> {{ selectedUser.username }}</p>
-      <p><strong>Email:</strong> {{ selectedUser.email }}</p>
-      <p><strong>Phone:</strong> {{ selectedUser.phone }}</p>
-      <p>
-        <strong>Address:</strong> {{ selectedUser.address.street }},
-        {{ selectedUser.address.suite }}, {{ selectedUser.address.city }},
-        {{ selectedUser.address.zipcode }}
-      </p>
-      <p>
-        <strong>Company:</strong> {{ selectedUser.company.name }} -
-        {{ selectedUser.company.catchPhrase }}
-      </p>
+  <div
+    v-if="selectedUser"
+    @click="closeModal"
+    class="relative z-10 modal"
+    aria-labelledby="modal-title"
+    role="dialog"
+    aria-modal="true"
+    @click.stop
+  >
+    <div
+      class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+      aria-hidden="true"
+    ></div>
+
+    <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+      <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+        <div
+          class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6"
+        >
+          <div>
+            <div class="mx-auto flex h items-center justify-center rounded-ful">
+              <div>
+                <span></span>
+                <h2>{{ selectedUser.name }}</h2>
+                <p><span class="font-bold">Username:</span> {{ selectedUser.username }}</p>
+                <p><span class="font-bold">Email:</span> {{ selectedUser.email }}</p>
+                <p><span class="font-bold">Phone:</span> {{ selectedUser.phone }}</p>
+                <p>
+                  <span class="font-bold">Address:</span> {{ selectedUser.address.street }},
+                  {{ selectedUser.address.suite }}, {{ selectedUser.address.city }},
+                  {{ selectedUser.address.zipcode }}
+                </p>
+                <p>
+                  <span class="font-bold">Company:</span> {{ selectedUser.company.name }} -
+                  {{ selectedUser.company.catchPhrase }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -181,31 +204,4 @@ export default {
 </script>
 
 <style scoped>
-.modal {
-  display: flex;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-content {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 5px;
-  width: 400px;
-  max-width: 90%;
-}
-
-.close {
-  position: absolute;
-  top: 10px;
-  right: 20px;
-  font-size: 20px;
-  cursor: pointer;
-}
 </style>
