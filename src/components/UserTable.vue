@@ -9,21 +9,53 @@
                 <tr>
                   <th
                     scope="col"
-                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                    @click="sortBy('name')"
+                    class="cursor-pointer py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                   >
                     Name
+                    <span v-if="currentSortColumn === 'name'">
+                      {{ currentSortDirection === 'asc' ? '↑' : '↓' }}
+                    </span>
                   </th>
-                  <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                  <th
+                    scope="col"
+                    @click="sortBy('username')"
+                    class="cursor-pointer px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                  >
                     Username
+                    <span v-if="currentSortColumn === 'username'">
+                      {{ currentSortDirection === 'asc' ? '↑' : '↓' }}
+                    </span>
                   </th>
-                  <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                  <th
+                    scope="col"
+                    @click="sortBy('email')"
+                    class="cursor-pointer px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                  >
                     Email
+                    <span v-if="currentSortColumn === 'email'">
+                      {{ currentSortDirection === 'asc' ? '↑' : '↓' }}
+                    </span>
                   </th>
-                  <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                  <th
+                    scope="col"
+                    @click="sortBy('address.city')"
+                    class="cursor-pointer px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                  >
                     City
+                    <span v-if="currentSortColumn === 'address.city'">
+                      {{ currentSortDirection === 'asc' ? '↑' : '↓' }}
+                    </span>
                   </th>
-                  <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                  <th
+                    scope="col"
+                    @click="sortBy('company.name')"
+                    class="cursor-pointer px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                  >
                     Company
+                    <span v-if="currentSortColumn === 'company.name'">
+                      {{ currentSortDirection === 'asc' ? '↑' : '↓' }}
+                    </span>
                   </th>
                   <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
                     <span class="sr-only">More</span>
@@ -31,7 +63,7 @@
                 </tr>
               </thead>
               <tbody class="divide-y divide-gray-200 bg-white">
-                <tr v-for="user in users" :key="user.id">
+                <tr v-for="user in sortedUsers" :key="user.id">
                   <td
                     class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
                   >
@@ -70,15 +102,50 @@
 </template>
 
 <script>
+import { computed, ref } from 'vue'
+
 export default {
   props: {
     users: {
       type: Array,
       required: true
     }
+  },
+
+  setup(props) {
+    const currentSortColumn = ref('name')
+    const currentSortDirection = ref('asc')
+
+    const sortBy = (column) => {
+      if (currentSortColumn.value === column) {
+        currentSortDirection.value = currentSortDirection.value === 'asc' ? 'desc' : 'asc'
+      } else {
+        currentSortColumn.value = column
+        currentSortDirection.value = 'asc'
+      }
+    }
+
+    const sortedUsers = computed(() => {
+      return [...props.users].sort((a, b) => {
+        let aValue = columnValue(a, currentSortColumn.value)
+        let bValue = columnValue(b, currentSortColumn.value)
+
+        if (aValue < bValue) return currentSortDirection.value === 'asc' ? -1 : 1
+        if (aValue > bValue) return currentSortDirection.value === 'asc' ? 1 : -1
+        return 0
+      })
+    })
+
+    const columnValue = (user, column) => {
+      return column.split('.').reduce((obj, key) => obj[key], user)
+    }
+
+    return {
+      currentSortColumn,
+      currentSortDirection,
+      sortBy,
+      sortedUsers
+    }
   }
 }
 </script>
-
-<style scoped>
-</style>
