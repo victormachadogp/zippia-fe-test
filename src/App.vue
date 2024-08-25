@@ -22,7 +22,7 @@
     </div>
     <button
       type="button"
-      @click="fetchUsers"
+      @click="loadUsers"
       class="relative -ml-px bg-white inline-flex items-center gap-x-1.5 rounded-r-md px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
     >
       Fetch Users
@@ -106,6 +106,7 @@
 <script>
 import { ref, computed } from 'vue'
 import UserModal from './components/UserModal.vue'
+import { fetchUsers } from '../services'
 
 export default {
   components: {
@@ -118,12 +119,10 @@ export default {
     const error = ref(null)
     const selectedUser = ref(null)
 
-    const fetchUsers = async () => {
+    const loadUsers = async () => {
       loading.value = true
       try {
-        const response = await fetch('https://jsonplaceholder.typicode.com/users')
-        if (!response.ok) throw new Error('Failed to fetch users')
-        users.value = await response.json()
+        users.value = await fetchUsers()
         console.log(users.value)
       } catch (err) {
         error.value = err.message
@@ -152,7 +151,7 @@ export default {
 
     return {
       searchUsers,
-      fetchUsers,
+      loadUsers,
       filteredUsers,
       hasFilteredUsers,
       loading,
