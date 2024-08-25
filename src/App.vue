@@ -14,6 +14,7 @@
         </svg>
       </div>
       <input
+        :disabled="!usersLoaded"
         v-model="searchUsers"
         placeholder="Search by name..."
         @input="filterUsers"
@@ -34,7 +35,7 @@
   <p v-if="error" style="color: red">{{ error }}</p>
 
   <p v-if="!loading && !usersLoaded && !hasFilteredUsers" class="pl-8 py-10">
-    Fetch Users' to load and display the user table
+    Fetch Users' to load, search and display the user table
   </p>
   <p v-if="!loading && usersLoaded && !hasFilteredUsers" class="pl-8 py-10">No users found.</p>
   <p v-if="loading">Loading...</p>
