@@ -33,7 +33,10 @@
 
   <p v-if="error" style="color: red">{{ error }}</p>
 
-  <p class="pl-8 py-10" v-if="!hasFilteredUsers && !loading">No users found.</p>
+  <p v-if="!loading && !usersLoaded && !hasFilteredUsers" class="pl-8 py-10">
+    Fetch Users' to load and display the user table
+  </p>
+  <p v-if="!loading && usersLoaded && !hasFilteredUsers" class="pl-8 py-10">No users found.</p>
   <p v-if="loading">Loading...</p>
 
   <UserModal v-if="selectedUser" :user="selectedUser" @close="closeModal" />
@@ -56,12 +59,13 @@ export default {
     const loading = ref(false)
     const error = ref(null)
     const selectedUser = ref(null)
+    const usersLoaded = ref(false)
 
     const loadUsers = async () => {
       loading.value = true
       try {
         users.value = await fetchUsers()
-        console.log(users.value)
+        usersLoaded.value = true
       } catch (err) {
         error.value = err.message
       } finally {
@@ -96,7 +100,8 @@ export default {
       error,
       selectedUser,
       selectUser,
-      closeModal
+      closeModal,
+      usersLoaded
     }
   }
 }
