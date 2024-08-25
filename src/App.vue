@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-2 flex rounded-md">
+  <div class="mt-2 flex flex-row rounded-md px-8">
     <div class="relative flex focus-within:z-10">
       <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
         <svg
@@ -23,38 +23,81 @@
     <button
       type="button"
       @click="fetchUsers"
-      class="relative -ml-px inline-flex items-center gap-x-1.5 rounded-r-md px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+      class="relative -ml-px bg-white inline-flex items-center gap-x-1.5 rounded-r-md px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
     >
       Fetch Users
     </button>
   </div>
 
-  <p v-if="error" style="color: red">{{ error }}</p>
+  <div class="px-4 sm:px-6 lg:px-8">
+    <div v-if="hasFilteredUsers" class="mt-8 flow-root">
+      <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+          <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+            <table class="min-w-full divide-y divide-gray-300">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th
+                    scope="col"
+                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                  >
+                    Name
+                  </th>
+                  <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                    Username
+                  </th>
+                  <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                    Email
+                  </th>
+                  <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                    City
+                  </th>
+                  <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                    Company
+                  </th>
+                  <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
+                    <span class="sr-only">More</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200 bg-white">
+                <tr v-for="user in filteredUsers" :key="user.id">
+                  <td
+                    class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
+                  >
+                    {{ user.name }}
+                  </td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                    {{ user.username }}
+                  </td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                    {{ user.email }}
+                  </td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                    {{ user.address.city }}
+                  </td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                    {{ user.company.name }}
+                  </td>
+                  <td
+                    class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
+                  >
+                    <button class="text-indigo-600 hover:text-indigo-900" @click="selectUser(user)">
+                      More
+                    </button>
+                  </td>
+                </tr>
 
-  <table v-if="hasFilteredUsers">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Username</th>
-        <th>Email</th>
-        <th>Phone</th>
-        <th>City</th>
-        <th>Company</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="user in filteredUsers" :key="user.id">
-        <td>{{ user.name }}</td>
-        <td>{{ user.username }}</td>
-        <td>{{ user.email }}</td>
-        <td>{{ user.phone }}</td>
-        <td>{{ user.address.city }}</td>
-        <td>{{ user.company.name }}</td>
-        <td><button @click="selectUser(user)">More</button></td>
-      </tr>
-    </tbody>
-  </table>
+                <!-- More people... -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p v-if="error" style="color: red">{{ error }}</p>
 
   <p v-if="!hasFilteredUsers && !loading">No users found.</p>
   <p v-if="loading">Loading...</p>

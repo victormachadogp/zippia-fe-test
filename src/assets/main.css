@@ -25,11 +25,10 @@ a,
   body {
     display: flex;
     place-items: center;
+    background-color: #f3f4f6;
   }
 
   #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
+    
   }
 }
