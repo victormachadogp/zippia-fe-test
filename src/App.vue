@@ -32,7 +32,7 @@
 
   <UserTable v-if="hasFilteredUsers" :users="filteredUsers" @select-user="selectUser" />
 
-  <p v-if="error" style="color: red">{{ error }}</p>
+  <p v-if="error" class="text-red-500">{{ error }}</p>
 
   <p v-if="!loading && !usersLoaded && !hasFilteredUsers" class="pl-8 py-10">
     Fetch Users' to load, search and display the user table
