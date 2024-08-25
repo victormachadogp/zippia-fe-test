@@ -39,6 +39,16 @@
                   </th>
                   <th
                     scope="col"
+                    @click="sortBy('phone')"
+                    class="cursor-pointer px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                  >
+                    Phone
+                    <span v-if="currentSortColumn === 'phone'">
+                      {{ currentSortDirection === 'asc' ? '↑' : '↓' }}
+                    </span>
+                  </th>
+                  <th
+                    scope="col"
                     @click="sortBy('address.city')"
                     class="cursor-pointer px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                   >
@@ -74,6 +84,9 @@
                   </td>
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                     {{ user.email }}
+                  </td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                    {{ user.phone }}
                   </td>
                   <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                     {{ user.address.city }}
@@ -137,7 +150,13 @@ export default {
     })
 
     const columnValue = (user, column) => {
-      return column.split('.').reduce((obj, key) => obj[key], user)
+      let value = column.split('.').reduce((obj, key) => obj[key], user)
+
+      if (column === 'phone') {
+        value = value.replace(/\D/g, '')
+      }
+
+      return value
     }
 
     return {
