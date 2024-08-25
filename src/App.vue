@@ -97,58 +97,20 @@
 
   <p v-if="error" style="color: red">{{ error }}</p>
 
-  <p v-if="!hasFilteredUsers && !loading">No users found.</p>
+  <p class="pl-8 py-10" v-if="!hasFilteredUsers && !loading">No users found.</p>
   <p v-if="loading">Loading...</p>
 
-  <div
-    v-if="selectedUser"
-    @click="closeModal"
-    class="relative z-10"
-    role="dialog"
-    aria-modal="true"
-    @click.stop
-  >
-    <div
-      class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
-      aria-hidden="true"
-    ></div>
-
-    <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
-      <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-        <div
-          class="min-w-[500px] relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6"
-        >
-          <div>
-            <div class="mx-auto flex h items-center justify-center rounded-ful">
-              <div>
-                <h2 class="text-xl pb-3">{{ selectedUser.name }}</h2>
-                <div class="flex flex-col gap-3">
-                  <p><span class="font-semibold">Username:</span> {{ selectedUser.username }}</p>
-                  <p><span class="font-semibold">Email:</span> {{ selectedUser.email }}</p>
-                  <p><span class="font-semibold">Phone:</span> {{ selectedUser.phone }}</p>
-                  <p>
-                    <span class="font-semibold">Address:</span> {{ selectedUser.address.street }},
-                    {{ selectedUser.address.suite }}, {{ selectedUser.address.city }},
-                    {{ selectedUser.address.zipcode }}
-                  </p>
-                  <p>
-                    <span class="font-semibold">Company:</span> {{ selectedUser.company.name }} -
-                    {{ selectedUser.company.catchPhrase }}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <UserModal v-if="selectedUser" :user="selectedUser" @close="closeModal" />
 </template>
   
 <script>
 import { ref, computed } from 'vue'
+import UserModal from './components/UserModal.vue'
 
 export default {
+  components: {
+    UserModal
+  },
   setup() {
     const users = ref([])
     const searchUsers = ref('')
