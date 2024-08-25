@@ -29,7 +29,9 @@
     </button>
   </div>
 
-  <div class="px-4 sm:px-6 lg:px-8">
+  <UserTable v-if="hasFilteredUsers" :users="filteredUsers" @select-user="selectUser" />
+
+  <!-- <div class="px-4 sm:px-6 lg:px-8">
     <div v-if="hasFilteredUsers" class="mt-8 flow-root">
       <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
@@ -93,7 +95,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <p v-if="error" style="color: red">{{ error }}</p>
 
@@ -106,11 +108,13 @@
 <script>
 import { ref, computed } from 'vue'
 import UserModal from './components/UserModal.vue'
+import UserTable from './components/UserTable.vue'
 import { fetchUsers } from '../services'
 
 export default {
   components: {
-    UserModal
+    UserModal,
+    UserTable
   },
   setup() {
     const users = ref([])
